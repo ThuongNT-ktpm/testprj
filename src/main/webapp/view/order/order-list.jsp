@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -80,7 +81,7 @@
 
                 <h2>ORDER LIST</h2>
 
-                <a href="${pageContext.request.contextPath}/view/order/order-add.jsp" class="btn add-btn">Add Order</a>
+                <a href="order?action=add" class="btn add-btn">Add Order</a>
 
                 <table>
 
@@ -96,43 +97,19 @@
                     </thead>
 
                     <tbody>
-
-                        <tr>
-                            <td>1</td>
-                            <td>iPhone 15</td>
-                            <td>1000</td>
-                            <td>10</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/view/order/order-update.jsp"
-                                    class="btn edit">Edit</a>
-                                <a href="#" class="btn delete">Delete</a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td>Samsung S23</td>
-                            <td>900</td>
-                            <td>15</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/view/order/order-update.jsp"
-                                    class="btn edit">Edit</a>
-                                <a href="#" class="btn delete">Delete</a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>3</td>
-                            <td>Oppo Reno</td>
-                            <td>500</td>
-                            <td>20</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/view/order/order-update.jsp"
-                                    class="btn edit">Edit</a>
-                                <a href="#" class="btn delete">Delete</a>
-                            </td>
-                        </tr>
-
+                        <c:forEach items="${list}" var="o">
+                            <tr>
+                                <td>${o.orderID}</td>
+                                <td>${o.cusId.cusName}</td>
+                                <td>${o.orderDate}</td>
+                                <td>${o.orderTotal_price}</td>
+                                <td>${o.orderStatus}</td>
+                                <td>
+                                    <a href="order?action=edit&id=${o.orderID}" class="btn edit">Edit</a>
+                                    <a href="order?action=delete&id=${o.orderID}" class="btn delete" onclick="return confirm('Are you sure?')">Delete</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
 
                 </table>

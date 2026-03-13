@@ -1,10 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <!DOCTYPE html>
     <html>
 
     <head>
 
-        <title>Add Product</title>
+        <title>Add Order</title>
 
         <style>
             body {
@@ -69,38 +70,38 @@
 
         <div class="container">
 
-            <h2>Add Product</h2>
+            <h2>Add Order</h2>
 
             <div class="card">
 
-                <form action="addProduct" method="post">
+                <form action="order?action=add" method="post">
 
                     <div class="form-group">
-                        <label>Name:</label>
-                        <input type="text" name="name">
+                        <label>Date:</label>
+                        <input type="datetime-local" name="date" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Price:</label>
-                        <input type="number" name="price">
+                        <label>Total Price:</label>
+                        <input type="number" step="0.01" name="total" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Quantity:</label>
-                        <input type="number" name="quantity">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Category:</label>
-
-                        <select name="category_id">
-                            <option value="1">Phone</option>
-                            <option value="2">Laptop</option>
-                            <option value="3">Accessories</option>
-                            <option value="4">Tablet</option>
-                            <option value="5">Smart Watch</option>
+                        <label>Status:</label>
+                        <select name="status">
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
                         </select>
+                    </div>
 
+                    <div class="form-group">
+                        <label>Customer:</label>
+                        <select name="cusId">
+                            <c:forEach items="${customers}" var="cus">
+                                <option value="${cus.cusId}">${cus.cusName}</option>
+                            </c:forEach>
+                        </select>
                     </div>
 
                     <button type="submit">Save</button>
@@ -113,4 +114,4 @@
 
     </body>
 
-    </html>
+    </html>

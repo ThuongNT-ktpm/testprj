@@ -55,20 +55,76 @@ public class OrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        dao.OrderDAO orderDAO = new dao.OrderDAO();
+        
+        if (action == null) {
+            java.util.List<model.Order> list = orderDAO.getAll();
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("view/order/order-list.jsp").forward(request, response);
+        } else if (action.equals("add")) {
+            dao.CustomerDAO customerDAO = new dao.CustomerDAO();
+            request.setAttribute("customers", customerDAO.getAll());
+            request.getRequestDispatcher("view/order/order-add.jsp").forward(request, response);
+        } else if (action.equals("edit")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            model.Order order = orderDAO.getById(id);
+            request.setAttribute("order", order);
+            
+            dao.CustomerDAO customerDAO = new dao.CustomerDAO();
+            request.setAttribute("customers", customerDAO.getAll());
+            
+            request.getRequestDispatcher("view/order/order-update.jsp").forward(request, response);
+        } else if (action.equals("delete")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            orderDAO.delete(id);
+            response.sendRedirect("order");
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        dao.OrderDAO orderDAO = new dao.OrderDAO();
+
+        if ("add".equals(action)) {
+            String date = request.getParameter("date");
+            double total = Double.parseDouble(request.getParameter("total"));
+            String status = request.getParameter("status");
+            int cusId = Integer.parseInt(request.getParameter("cusId"));
+
+            model.Order o = new model.Order();
+            o.setOrderDate(date);
+            o.setOrderTotal_price(total);
+            o.setOrderStatus(status);
+            
+            model.Customer c = new model.Customer();
+            c.setCusId(cusId);
+            o.setCusId(c);
+
+            orderDAO.insert(o);
+            response.sendRedirect("order");
+        } else if ("edit".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String date = request.getParameter("date");
+            double total = Double.parseDouble(request.getParameter("total"));
+            String status = request.getParameter("status");
+            int cusId = Integer.parseInt(request.getParameter("cusId"));
+
+            model.Order o = new model.Order();
+            o.setOrderID(id);
+            o.setOrderDate(date);
+            o.setOrderTotal_price(total);
+            o.setOrderStatus(status);
+            
+            model.Customer c = new model.Customer();
+            c.setCusId(cusId);
+            o.setCusId(c);
+
+            orderDAO.update(o);
+            response.sendRedirect("order");
+        }
     }
 
     /**
