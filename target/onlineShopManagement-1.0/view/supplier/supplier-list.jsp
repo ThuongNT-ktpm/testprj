@@ -1,146 +1,285 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-    <!DOCTYPE html>
-    <html lang="en">
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Management</title>
 
-        <title>Product List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-        <style>
-            body {
-                background: #0f172a;
-                font-family: Consolas, monospace;
-                color: white;
-            }
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --bg-light: #F4F7F6;
+            --surface: #FFFFFF;
+            --text-main: #333333;
+            --text-muted: #7f8c8d;
+            --accent: #3498DB;
+            --danger: #E74C3C;
+            --success: #2ECC71;
+            --warning: #F1C40F;
+        }
 
-            .container {
-                width: 800px;
-                margin: auto;
-                margin-top: 80px;
-            }
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
+        }
 
-            .card {
-                background: #020617;
-                padding: 40px;
-                border-radius: 15px;
-                border: 1px solid #334155;
-            }
+        /* --- Sidebar Styling --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
 
-            h2 {
-                text-align: center;
-                margin-bottom: 30px;
-            }
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            color: var(--surface);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
+        .sidebar a {
+            color: #bdc3c7;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-            th,
-            td {
-                padding: 10px;
-                border-bottom: 1px solid #475569;
-            }
+        .sidebar a:hover, .sidebar a.active {
+            color: var(--surface);
+            background-color: var(--secondary);
+            border-left: 4px solid var(--accent);
+        }
 
-            th {
-                text-align: left;
-            }
+        /* --- Main Content Styling --- */
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-            .btn {
-                padding: 6px 12px;
-                text-decoration: none;
-                border-radius: 5px;
-            }
+        /* --- Navbar Styling --- */
+        .top-navbar {
+            background-color: var(--surface);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
 
-            .add-btn {
-                display: inline-block;
-                margin-bottom: 20px;
-                background: #2563eb;
-                color: white;
-            }
+        .user-profile {
+            font-weight: 500;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-            .edit {
-                background: #facc15;
-                color: black;
-            }
+        .btn-logout {
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 5px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
 
-            .delete {
-                background: #ef4444;
-                color: white;
-            }
-        </style>
+        .btn-logout:hover {
+            background-color: var(--danger);
+            color: white;
+        }
 
-    </head>
+        /* --- Page specific styling --- */
+        .page-wrapper {
+            padding: 30px;
+        }
 
-    <body>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
 
-        <div class="container">
+        .page-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
+        }
 
-            <div class="card">
+        .card-box {
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
 
-                <h2>SUPPLIER LIST</h2>
+        /* Table Styling */
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background-color: var(--bg-light);
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+            padding: 15px;
+        }
 
-                <a href="${pageContext.request.contextPath}/view/supplier/supplier-add.jsp" class="btn add-btn">Add
-                    Supplier</a>
+        .table tbody td {
+            vertical-align: middle;
+            padding: 15px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        /* Action Buttons */
+        .btn-action {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+        }
 
-                <table>
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: 0.3s; }
+            .main-content { margin-left: 0; }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+        }
+    </style>
+</head>
 
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Supplier Name</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
+<body>
 
-                    <tbody>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="bi bi-shop me-2"></i> ONLINE SHOP
+        </div>
+        
+        <a href="${pageContext.request.contextPath}/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="${pageContext.request.contextPath}/user"><i class="bi bi-people"></i> Users</a>
+        <a href="${pageContext.request.contextPath}/product"><i class="bi bi-box-seam"></i> Products</a>
+        <a href="${pageContext.request.contextPath}/category"><i class="bi bi-tags"></i> Categories</a>
+        <a href="${pageContext.request.contextPath}/customer"><i class="bi bi-person-lines-fill"></i> Customers</a>
+        <a href="${pageContext.request.contextPath}/order"><i class="bi bi-cart-check"></i> Orders</a>
+        <a href="${pageContext.request.contextPath}/supplier" class="active"><i class="bi bi-truck"></i> Suppliers</a>
+    </div>
 
-                        <tr>
-                            <td>Apple Supplier</td>
-                            <td>Vivo</td>
-                            <td>fdssf</td>
-                            <td>dfdf</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/view/supplier/supplier-update.jsp"
-                                    class="btn edit">Edit</a>
-                                <a href="#" class="btn delete">Delete</a>
-                            </td>
-                        </tr>
+    <div class="main-content">
+        
+        <nav class="top-navbar">
+            <div class="d-none d-md-block"></div>
+            <div class="user-profile">
+                <span>
+                    <i class="bi bi-person-circle fs-5 align-middle me-1"></i> 
+                    Hi, <strong>${cookie.userName.value}</strong> 
+                    <span class="badge bg-secondary ms-1">${cookie.userRole.value}</span>
+                </span>
+                <a class="btn-logout" href="${pageContext.request.contextPath}/logout">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </nav>
 
-                        <tr>
-                            <td>2</td>
-                            <td>Samsung S23</td>
-                            <td>900</td>
-                            <td>15</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/view/supplier/supplier-update.jsp"
-                                    class="btn edit">Edit</a>
-                                <a href="#" class="btn delete">Delete</a>
-                            </td>
-                        </tr>
+        <div class="page-wrapper">
+            
+            <div class="page-header">
+                <h4 class="page-title">Supplier List</h4>
+                <a href="${pageContext.request.contextPath}/supplier?action=add" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Add New Supplier
+                </a>
+            </div>
 
-                        <tr>
-                            <td>3</td>
-                            <td>Oppo Reno</td>
-                            <td>500</td>
-                            <td>20</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/view/supplier/supplier-update.jsp"
-                                    class="btn edit">Edit</a>
-                                <a href="#" class="btn delete">Delete</a>
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
+            <div class="card-box">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Supplier Name</th>
+                                <th>Contact Info</th>
+                                <th>Address</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>  
+                        <tbody> 
+                            <c:forEach items="${listSup}" var="s">
+                                <tr>
+                                    <td><strong>#${s.supId}</strong></td>
+                                    <td>
+                                        <div class="d-flex align-items-center fw-medium text-primary">
+                                            <i class="bi bi-building me-2 fs-5 text-secondary"></i>
+                                            ${s.supName}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div><i class="bi bi-telephone text-muted me-1"></i> ${s.supPhone}</div>
+                                        <div class="text-muted small"><i class="bi bi-envelope me-1"></i> ${s.supEmail}</div>
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-geo-alt text-muted me-1"></i> ${s.supAddress}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="supplier?action=update&id=${s.supId}" class="btn btn-warning btn-action text-dark me-1" title="Edit">
+                                            <i class="bi bi-pencil-square"></i> Edit
+                                        </a>
+                                        <a href="supplier?action=delete&id=${s.supId}" 
+                                           onclick="return confirm('Are you sure you want to delete this supplier?')" 
+                                           class="btn btn-danger btn-action" title="Delete">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach> 
+                            
+                            <c:if test="${empty listSup}">
+                                <tr>
+                                    <td colspan="5" class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                        <h5>No suppliers found</h5>
+                                        <p class="mb-0">Click "Add New Supplier" to create one.</p>
+                                    </td>
+                                </tr>
+                            </c:if>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>
+    </div>
 
-    </body>
-
-    </html>
+</body>
+</html>

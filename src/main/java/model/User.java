@@ -8,22 +8,27 @@ package model;
  *
  * @author LEGION
  */
-public class UserDAO {
+public class User {
     Integer userId;
     String userName;
     String userPass;
     String userEmail;
     String userRole;
 
-    public UserDAO() {
+    public User() {
     }
 
-    public UserDAO(Integer userId, String userName, String userPass, String userEmail, String userRole) {
+    public User(Integer userId, String userName, String userPass, String userEmail, String userRole) {
         this.userId = userId;
         this.userName = userName;
         this.userPass = userPass;
         this.userEmail = userEmail;
         this.userRole = userRole;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "userId=" + userId + ", userName=" + userName + ", userPass=" + userPass + ", userEmail=" + userEmail + ", userRole=" + userRole + '}';
     }
 
     public Integer getUserId() {

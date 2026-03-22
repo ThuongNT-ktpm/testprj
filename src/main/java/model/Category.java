@@ -46,6 +46,11 @@ public class Category {
     public void setCateDes(String CateDes) {
         this.CateDes = CateDes;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" + "CateId=" + CateId + ", CateName=" + CateName + ", CateDes=" + CateDes + '}';
+    }
     
     
 }

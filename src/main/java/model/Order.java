@@ -57,6 +57,11 @@ public class Order {
     public void setCusId(Customer cusId) {
         this.cusId = cusId;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" + "orderID=" + orderID + ", orderDate=" + orderDate + ", orderTotal_price=" + orderTotal_price + ", orderStatus=" + orderStatus + ", cusId=" + cusId + '}';
+    }
     
     
 }

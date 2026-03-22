@@ -65,6 +65,11 @@ public class Product {
     public void setCateId(Category cateId) {
         this.cateId = cateId;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" + "proId=" + proId + ", proName=" + proName + ", proPrice=" + proPrice + ", proQuantity=" + proQuantity + ", cateId=" + cateId + '}';
+    }
     
     
 }
