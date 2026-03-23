@@ -12,10 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
+import model.Category;
 import model.Product;
-import model.User;
 
 /**
  *
@@ -73,20 +72,25 @@ public class ProductServlet extends HttpServlet {
             request.setAttribute("listPro", list);
             request.getRequestDispatcher("view/product/product-list.jsp").forward(request, response);
         } else if (action.equals("add")) {
-            List<Product> list = dao.getAllProduct();
-            request.setAttribute("listPro", list);
+            dao.CategoryDAO cateDao = new dao.CategoryDAO();
+            List<Category> listCate = cateDao.getAllCate();
+
+            request.setAttribute("listCate", listCate);
             request.getRequestDispatcher("view/product/product-add.jsp").forward(request, response);
 
         } else if (action.equals("update")) {
             int id = Integer.parseInt(request.getParameter("id"));
             Product u = dao.getProById(id);
             request.setAttribute("listUpdate", u);
+            dao.CategoryDAO cateDao = new dao.CategoryDAO();
+            List<Category> listCate = cateDao.getAllCate();
+            request.setAttribute("listCate", listCate);
             request.getRequestDispatcher("view/product/product-update.jsp").forward(request, response);
 
-        }else if (action.equals("delete")){
+        } else if (action.equals("delete")) {
             int id = Integer.parseInt(request.getParameter("id"));
             dao.delete(id);
-            response.sendRedirect(request.getContextPath()+"/product");
+            response.sendRedirect(request.getContextPath() + "/product");
         }
     }
 

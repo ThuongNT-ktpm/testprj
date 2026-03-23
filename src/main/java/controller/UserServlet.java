@@ -97,7 +97,6 @@ public class UserServlet extends HttpServlet {
                 }
             }
             if (!"admin".equalsIgnoreCase(role)) {
-                request.setAttribute("errorMsg", "Bạn không có quyền truy cập trang này. Chỉ Admin mới xem được chi tiết User.");
                 List<User> list = dao.getAllUser();
                 request.setAttribute("listUser", list);
                 request.getRequestDispatcher("view/user/user-list.jsp").forward(request, response);

@@ -259,9 +259,9 @@
                         <div class="mb-4">
                             <label class="form-label"><i class="bi bi-activity text-secondary me-1"></i> Order Status</label>
                             <select name="status" class="form-select">
-                                <option value="Pending" selected>⌛ Pending</option>
-                                <option value="Completed">✅ Completed</option>
-                                <option value="Cancelled">❌ Cancelled</option>
+                                <option value="Pending" selected>Pending</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
 

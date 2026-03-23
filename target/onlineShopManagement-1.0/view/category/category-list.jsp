@@ -220,8 +220,9 @@
                 <a href="category?action=add" class="btn btn-primary">
                     <i class="bi bi-plus-lg"></i> Add New Category
                 </a>
+                
             </div>
-
+            
             <div class="card-box">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
