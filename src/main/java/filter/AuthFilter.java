@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -18,8 +19,6 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.User;
 
 /**
  *
@@ -101,30 +100,45 @@ public class AuthFilter implements Filter {
      * @exception IOException      if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        Cookie cookies[] = req.getCookies();
+        Cookie[] cookies = req.getCookies();
         String username = null;
+        String userRole = null;
+
         if (cookies != null) {
             for (Cookie c : cookies) {
                 if (c.getName().equalsIgnoreCase("UserName")) {
                     username = c.getValue();
-                    break;
+                } else if (c.getName().equalsIgnoreCase("userRole")) {
+                    userRole = c.getValue();
                 }
             }
         }
 
-        if (username == null) {
+        // Chưa login → chuyển về login
+        if (username == null || userRole == null) {
             res.sendRedirect(req.getContextPath() + "/login");
-        } else {
-            chain.doFilter(request, response);
+            return;
         }
-    }
 
+        // Phân quyền
+        String path = req.getServletPath();
+        if (path.equals("/user/user-detail")) {
+            // Chỉ Admin mới được vào
+            if (!"admin".equalsIgnoreCase(userRole)) {
+                res.sendRedirect(req.getContextPath() + "/user"); // redirect về danh sách user
+                return;
+            }
+        }
+
+        // Các URL khác thì Admin và Staff đều được
+        chain.doFilter(request, response);
+    }
     /**
      * Return the filter configuration object for this filter.
      */

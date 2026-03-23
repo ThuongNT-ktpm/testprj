@@ -25,7 +25,7 @@ public class DBContext {
             String dbURL = "jdbc:sqlserver://localhost:1433;"
                     + "databaseName=OnlineShopDB;"
                     + "user=sa;"
-                    + "password=12345;"
+                    + "password=123456;"
                     + "encrypt=true;trustServerCertificate=true;";
             conn = DriverManager.getConnection(dbURL);
             if (conn != null) {
@@ -40,6 +40,7 @@ public class DBContext {
                 System.out.println("NULL");
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             System.out.println("Khong ket noi duoc roi em oi...........");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);

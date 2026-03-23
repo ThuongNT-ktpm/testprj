@@ -174,6 +174,7 @@ public class UserDAO extends util.DBContext {
                 u.setUserRole(rs.getString("role"));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         }
         return u;
 
@@ -181,6 +182,6 @@ public class UserDAO extends util.DBContext {
 
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        System.out.println(dao.login("admin", "123"));
+        System.out.println(dao.login("tankhang", "123"));
     }
 }
