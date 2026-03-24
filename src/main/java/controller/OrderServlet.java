@@ -105,9 +105,19 @@ public class OrderServlet extends HttpServlet {
         }
         if (action.equals("add")) {
             String date = request.getParameter("date");
+            if (date != null && date.contains("T")) {
+                date = date.split("T")[0];
+            }
+            String cusIdStr = request.getParameter("cusId");
+            if (cusIdStr == null || cusIdStr.trim().isEmpty()) {
+                request.setAttribute("error", "Please select a customer before saving order.");
+                request.setAttribute("customers", new dao.CustomerDAO().getAllCustomer());
+                request.getRequestDispatcher("view/order/order-add.jsp").forward(request, response);
+                return;
+            }
             double total = Double.parseDouble(request.getParameter("total"));
             String status = request.getParameter("status");
-            int cusId = Integer.parseInt(request.getParameter("cusId"));
+            int cusId = Integer.parseInt(cusIdStr);
             Order o = new Order();
             o.setOrderDate(date);
             o.setOrderTotal_price(total);
@@ -120,9 +130,20 @@ public class OrderServlet extends HttpServlet {
         } else if (action.equals("edit")) {
             int id = Integer.parseInt(request.getParameter("id"));
             String date = request.getParameter("date");
+            if (date != null && date.contains("T")) {
+                date = date.split("T")[0];
+            }
+            String cusIdStr = request.getParameter("cusId");
+            if (cusIdStr == null || cusIdStr.trim().isEmpty()) {
+                request.setAttribute("error", "Please select a customer before saving order.");
+                request.setAttribute("order", orderDAO.getById(id));
+                request.setAttribute("customers", new dao.CustomerDAO().getAllCustomer());
+                request.getRequestDispatcher("view/order/order-update.jsp").forward(request, response);
+                return;
+            }
             double total = Double.parseDouble(request.getParameter("total"));
             String status = request.getParameter("status");
-            int cusId = Integer.parseInt(request.getParameter("cusId"));
+            int cusId = Integer.parseInt(cusIdStr);
             Order o = new Order();
             o.setOrderID(id);
             o.setOrderDate(date);

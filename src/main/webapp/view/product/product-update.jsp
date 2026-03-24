@@ -271,9 +271,13 @@
                             <div class="mb-4">
                                 <label class="form-label"><i class="bi bi-tag text-secondary me-1"></i> Category</label>
 
-                                <select name="cateName" class="form-select">
+                                <select name="cateName" class="form-select" required>
+                                    <option value="" disabled ${empty listCate ? 'selected' : ''}>-- Select category --</option>
+                                    <c:if test="${empty listCate}">
+                                        <option value="" disabled>No categories found. Add category first.</option>
+                                    </c:if>
                                     <c:forEach items="${listCate}" var="c">  
-                                        <option value="${c.cateName}" ${c.cateName == listUpdate.cateId.cateName ? 'selected' : ''}>
+                                      <option value="${c.cateName}" ${c.cateId == listUpdate.cateId.cateId ? 'selected' : ''}>
                                             ${c.cateName}
                                         </option>
                                     </c:forEach>

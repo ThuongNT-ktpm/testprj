@@ -78,7 +78,7 @@ public class SupplierServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/supplier");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+          
         }
     }
 

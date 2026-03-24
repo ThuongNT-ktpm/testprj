@@ -234,7 +234,7 @@
             <div class="card-box">
                 <div class="form-container">
                     
-                    <form action="order" method="post">
+                    <form action="${pageContext.request.contextPath}/order" method="post">
                         <input type="hidden" name="action" value="edit">
 
                         <div class="mb-4">
@@ -259,7 +259,11 @@
 
                         <div class="mb-4">
                             <label class="form-label"><i class="bi bi-person text-secondary me-1"></i> Customer</label>
-                            <select name="cusId" class="form-select">
+                            <select name="cusId" class="form-select" required>
+                                <option value="" disabled ${empty customers ? 'selected' : ''}>-- Select a Customer --</option>
+                                <c:if test="${empty customers}">
+                                    <option value="" disabled>No customers available.</option>
+                                </c:if>
                                 <c:forEach items="${customers}" var="cus">
                                     <option value="${cus.cusId}" ${cus.cusId == order.cusId.cusId ? 'selected' : ''}>
                                         ${cus.cusName} (ID: ${cus.cusId})

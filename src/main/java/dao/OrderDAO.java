@@ -113,6 +113,7 @@ public class OrderDAO extends util.DBContext {
             st.setInt(5, o.getOrderID());
             st.executeUpdate();
         } catch (java.sql.SQLException e) {
+            e.printStackTrace();
         }
     }
 

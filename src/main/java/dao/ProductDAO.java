@@ -21,7 +21,7 @@ public class ProductDAO extends util.DBContext {
     public List<Product> getAllProduct() {
 
         String sql = "SELECT   Products.id, Products.name, Products.price, Products.quantity, Categories.id AS CategoryId, Categories.name AS categoryName, Categories.description AS categoryDes\n"
-                + "FROM         Categories INNER JOIN\n"
+                + "FROM         Categories  JOIN\n"
                 + "                         Products ON Categories.id = Products.category_id";
         List<Product> list = new ArrayList<>();
 

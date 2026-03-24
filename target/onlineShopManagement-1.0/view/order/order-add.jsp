@@ -229,7 +229,11 @@
             <div class="card-box">
                 <div class="form-container">
                     
-                    <form action="order?action=add" method="post">
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger" role="alert">${error}</div>
+                    </c:if>
+
+                    <form action="${pageContext.request.contextPath}/order?action=add" method="post">
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
@@ -249,7 +253,10 @@
                         <div class="mb-4">
                             <label class="form-label"><i class="bi bi-person text-secondary me-1"></i> Customer <span class="text-danger">*</span></label>
                             <select name="cusId" class="form-select" required>
-                                <option value="" disabled selected>-- Select a Customer --</option>
+                                <option value="" disabled ${empty customers ? 'selected' : ''}>-- Select a Customer --</option>
+                                <c:if test="${empty customers}">
+                                    <option value="" disabled>No customers available. Add customer first.</option>
+                                </c:if>
                                 <c:forEach items="${customers}" var="cus">
                                     <option value="${cus.cusId}">${cus.cusName} (ID: ${cus.cusId})</option>
                                 </c:forEach>
